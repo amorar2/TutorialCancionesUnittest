@@ -12,7 +12,8 @@ class Coleccion():
     def agregar_album(self, titulo, anio, descripcion, medio):
         busqueda = session.query(Album).filter(Album.titulo == titulo).all()
         if len(busqueda) == 0:
-            album = Album(titulo=titulo, ano=anio, descripcion=descripcion, medio=medio)
+            album = Album(titulo=titulo, ano=anio,
+                          descripcion=descripcion, medio=medio)
             session.add(album)
             session.commit()
             return True
@@ -20,7 +21,8 @@ class Coleccion():
             return False
 
     def editar_album(self, album_id, titulo, anio, descripcion, medio):
-        busqueda = session.query(Album).filter(Album.titulo == titulo, Album.id != album_id).all()
+        busqueda = session.query(Album).filter(
+            Album.titulo == titulo, Album.id != album_id).all()
         if len(busqueda) == 0:
             album = session.query(Album).filter(Album.id == album_id).first()
             album.titulo = titulo
@@ -32,6 +34,15 @@ class Coleccion():
         else:
             return False
 
+    def eliminar_album(self, album_id):
+       try:
+           album = session.query(Album).filter(Album.id == album_id).first()
+           session.delete(album)
+           session.commit()
+           return True
+       except:
+           return False
+
     def dar_album_por_id(self, album_id):
-        return session.query(Album).get(album_id).__dict__
+       return session.query(Album).get(album_id).__dict__
 
